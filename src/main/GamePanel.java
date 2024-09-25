@@ -1,5 +1,7 @@
 package main;
 
+import main.entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
@@ -11,7 +13,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 16; //16x16 tiles
     final int scale = 3;
 
-    final int tileSize = originalTileSize * scale; //48
+    public final int tileSize = originalTileSize * scale; //48
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
 
@@ -25,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this, keyH); //this = gamepanelclass Instance of player
 
     //Set player pos
     int playerX = 100;
@@ -76,27 +79,14 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void update() {
-        if(keyH.upPressed == true) {
-            playerY -= playerSpeed;
-        }
-        if (keyH.downPressed == true) {
-            playerY += playerSpeed;
-        }
-        if (keyH.leftPressed == true) {
-            playerX -= playerSpeed;
-        }
-        if (keyH.rightPressed == true) {
-            playerX += playerSpeed;
-        }
+        player.update();
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //parentClass = Jpanel
 
         Graphics2D g2 = (Graphics2D)g;//change graphics to graphics 2D class (more functions)
 
-        g2.setColor(Color.green);
-
-        g2.fillRect(playerX,playerY, tileSize,tileSize);
+        player.draw(g2);
 
         g2.dispose();
     }
