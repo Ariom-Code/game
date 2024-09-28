@@ -18,7 +18,7 @@ public class TileManager {
         this.gp = gp;
 
         tile = new Tile[10]; // number of tiles we need
-        mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
+        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
         loadMap("/resources/maps/map.txt");
@@ -36,6 +36,11 @@ public class TileManager {
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/resources/tiles/brick.png"));
 
+            tile[3] = new Tile();
+            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/resources/tiles/sand.png"));
+
+            tile[4] = new Tile();
+            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/resources/tiles/tree.png"));
 
         } catch (IOException e){
             e.printStackTrace();
@@ -51,11 +56,11 @@ public class TileManager {
 
             int col = 0;
             int row = 0;
-            while(col < gp.maxScreenCol && row < gp.maxScreenRow) {
+            while(col < gp.maxWorldCol && row < gp.maxWorldRow) {
 
                 String line = br.readLine();
 
-                while (col < gp.maxScreenCol) {
+                while (col < gp.maxWorldCol) {
                     String numbers[] = line.split(" ");
 
                     int number = Integer.parseInt(numbers[col]); //string to integer
@@ -63,7 +68,7 @@ public class TileManager {
                     mapTileNum[col] [row] = number;
                     col++;
                 }
-                if(col == gp.maxScreenCol) {
+                if(col == gp.maxWorldCol) {
                     col = 0;
                     row++;
                 }
@@ -78,24 +83,42 @@ public class TileManager {
     public void draw(Graphics2D g2) {
         //g2.drawImage(tile[0].image, 0,0, gp.tileSize, gp.tileSize, null);
 
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int worldCol = 0;
+        int worldRow = 0;
 
-        while(col < gp.maxScreenCol && row < gp.maxScreenRow){
+        while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow){
 
-            int tileNum = mapTileNum[col][row]; //sort la valeur 0, 1, 2 etc de la tile
+            int tileNum = mapTileNum[worldCol][worldRow]; //sort la valeur 0, 1, 2 etc de la tile
 
-            g2.drawImage(tile[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
-            col++;
-            x += gp.tileSize;
+            //gp.player.worldX = position du joueur dans le monde
+            //gp.player.screenX = ses coo affichage sur l'écran
+            //maptileNum charge le type de tile des coordonnées de la tile
+            //worldX = coordonnées de la tuile dans le monde
+            //screenX est la ou la tuile va etre affichée
 
-            if(col == gp.maxScreenCol) {
-                col = 0;
-                x= 0 ;
-                row++;
-                y += gp.tileSize;
+            int worldX = worldCol * gp.tileSize; //position on the map
+            int worldY = worldRow * gp.tileSize;
+            int screenX = worldX - gp.player.worldX + gp.player.screenX; //where on the screen to draw it, the +screnx is to set the offset
+            int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+            //definit les limites du chargement du monde pour les perfs
+            if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
+            && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+            && worldY + gp.tileSize > gp.player.worldY - gp.player.screenY
+            && worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
+
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+            }
+
+            worldCol++;
+
+
+            if(worldCol == gp.maxWorldCol) {
+                worldCol = 0;
+
+                worldRow++;
+
             }
         }
 
