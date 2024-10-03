@@ -135,6 +135,7 @@ public class Player extends Entity{
 
             switch (objectName){
                 case "Key":
+                    gp.playSE(3);
                     numKey++;
                     gp.obj[i] = null; //delete object
 
@@ -142,6 +143,7 @@ public class Player extends Entity{
                     break;
 
                 case "Key_sad":
+                    gp.playSE(3);
                     numKeySad++;
                     gp.obj[i] = null; //delete object
 
@@ -150,6 +152,7 @@ public class Player extends Entity{
 
                 case "Door" :
                     if(numKey > 0){
+                        gp.playSE(2);
                         gp.obj[i] = null;
                         numKey--;
 
@@ -159,11 +162,17 @@ public class Player extends Entity{
 
                 case "Chest" :
                     if(numKeySad > 0){
+                        gp.playSE(2);
                         gp.obj[i] = null;
                         numKeySad--;
 
                         System.out.println(numKeySad);
                     }
+                    break;
+
+                case "Boots" :
+                    speed += 2;
+                    gp.obj[i] = null;
                     break;
             }
 
