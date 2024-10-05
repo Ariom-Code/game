@@ -16,8 +16,8 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
-    int numKey = 0;
-    int numKeySad = 0;
+    public int numKey = 0;
+    public int numKeyBlue = 0;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -64,10 +64,10 @@ public class Player extends Entity{
         }
     }
 
-
     public void update() {
 
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true) {
+
             if(keyH.upPressed == true) {
                 direction = "up";
             }
@@ -80,6 +80,7 @@ public class Player extends Entity{
             if (keyH.rightPressed == true) {
                 direction = "right";
             }
+
 
             //CHECK TILE COLLISION
             collisionOn = false;
@@ -120,7 +121,6 @@ public class Player extends Entity{
 
         }
 
-
         if (keyH.spacePressed == true) {
             worldX = 350;
             worldY = 250;
@@ -138,16 +138,14 @@ public class Player extends Entity{
                     gp.playSE(3);
                     numKey++;
                     gp.obj[i] = null; //delete object
-
-                    System.out.println(numKey);
+                    gp.ui.showMessage("+1 Key!");
                     break;
 
-                case "Key_sad":
+                case "Key_blue":
                     gp.playSE(3);
-                    numKeySad++;
+                    numKeyBlue++;
                     gp.obj[i] = null; //delete object
-
-                    System.out.println(numKeySad);
+                    gp.ui.showMessage("+1 Key!");
                     break;
 
                 case "Door" :
@@ -155,24 +153,30 @@ public class Player extends Entity{
                         gp.playSE(2);
                         gp.obj[i] = null;
                         numKey--;
-
-                        System.out.println(numKey);
+                        gp.ui.showMessage("Door opened!");
+                    }
+                    else{
+                        gp.ui.showMessage("You need a key!");
                     }
                     break;
 
                 case "Chest" :
-                    if(numKeySad > 0){
-                        gp.playSE(2);
+                    if(numKeyBlue > 0){
                         gp.obj[i] = null;
-                        numKeySad--;
-
-                        System.out.println(numKeySad);
+                        numKeyBlue--;
+                        gp.ui.gameFinished = true;
+                        gp.stopMusic();
+                        gp.playSE(2);
+                    }
+                    else{
+                        gp.ui.showMessage("You need a key!");
                     }
                     break;
 
                 case "Boots" :
-                    speed += 2;
+                    speed += 1;
                     gp.obj[i] = null;
+                    gp.ui.showMessage("Speed up!");
                     break;
             }
 

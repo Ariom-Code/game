@@ -1,7 +1,6 @@
 package main;
 
 import entity.Player;
-import object.OBJ_Key;
 import object.SuperObject;
 import tile.TileManager;
 
@@ -36,9 +35,11 @@ public class GamePanel extends JPanel implements Runnable{
     //SYS
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Sound sound = new Sound();
+    Sound soundEffects = new Sound();
+    Sound music = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
+    public UI ui = new UI(this);
     Thread gameThread;
 
     //ENTITY OBJ
@@ -55,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame() {
         aSetter.setObjects();
-        playMusic(1);
+        playMusic(0);
     }
 
     public void startGameThread() {
@@ -111,23 +112,27 @@ public class GamePanel extends JPanel implements Runnable{
                 obj[i].draw(g2, this);
             }
         }
-
+        //PLAYER
         player.draw(g2);
+
+        //UI
+        ui.draw(g2);
 
         g2.dispose();
     }
 
     public void playMusic(int i){
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
 
     }
     public void stopMusic(){
-        sound.stop();
+        music.stop();
     }
+
     public void playSE(int i){
-        sound.setFile(i);
-        sound.play();
+        soundEffects.setFile(i);
+        soundEffects.play();
     }
 }
