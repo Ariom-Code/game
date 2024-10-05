@@ -56,7 +56,7 @@ public class UI {
             text = "Your time is : " + dFormat.format(playTime) +"!";
             textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth(); //return la longueur du texte
             x = gp.screenWidth/2 - textLength/2;
-            y = gp.screenHeight/2 + gp.tileSize*4;
+            y = gp.screenHeight/2 + gp.tileSize*3;
             g2.drawString(text, x, y);
 
             g2.setFont(arial_80b);
@@ -74,11 +74,11 @@ public class UI {
             g2.setFont(arial_40);
             g2.setColor(Color.white);
             g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2, gp.tileSize, gp.tileSize, null); //division pour positionnement au milieu
-            g2.drawString("x = " + gp.player.numKey , 74, 65); //fonctionne différement: y correspond aux coo du bas du texte et non du haut
+            g2.drawString("x = " + gp.player.numKey , 90, 85); //fonctionne différement: y correspond aux coo du bas du texte et non du haut
 
             //TIME
             playTime += (double) 1/60;
-            g2.drawString("Time : " + dFormat.format(playTime), gp.tileSize*11, 65);
+            g2.drawString("Time : " + dFormat.format(playTime), gp.tileSize*9, 65);
 
 
             //DRAW MESSAGE
