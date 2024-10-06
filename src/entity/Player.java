@@ -49,10 +49,15 @@ public class Player extends Entity{
 
         try {
 
+            down = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
+            up = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
+            left = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
+            right = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
+
             up1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_up_1.png"));
             up2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_down_2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_walk1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_walk2.png"));
             left1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_left_1.png"));
             left2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_left_2.png"));
             right1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_right_1.png"));
@@ -107,7 +112,6 @@ public class Player extends Entity{
                         break;
                 }
             }
-
 
             spriteCounter++;
             if(spriteCounter > 12){ //player image change every 12 frames
@@ -187,42 +191,71 @@ public class Player extends Entity{
     public void draw(Graphics2D g2) {
         //g2.setColor(Color.white);
         //g2.fillRect(x,y, gp.tileSize, gp.tileSize); //access tilesize because it's public
-
         BufferedImage image = null;
-        switch (direction) {
-            case "up":
-                if (spriteNumber == 1){
-                    image = up1;
-                }
-                if (spriteNumber == 2){
-                    image = up2;
-                }
-                break;
-            case "down":
-                if (spriteNumber == 1){
-                    image = down1;
-                }
-                if (spriteNumber == 2){
-                    image = down2;
-                }
-                break;
-            case "left":
-                if (spriteNumber == 1){
-                    image = left1;
-                }
-                if (spriteNumber == 2){
-                    image = left2;
-                }
-                break;
-            case "right":
-                if (spriteNumber == 1){
-                    image = right1;
-                }
-                if (spriteNumber == 2){
-                    image = right2;
-                }
-                break;
+        if(keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true) {
+
+            switch (direction) {
+                case "up":
+                    if (spriteNumber == 1) {
+                        image = up1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = up2;
+                    }
+                    break;
+                case "down":
+                    if (spriteNumber == 1) {
+                        image = down1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = down2;
+                    }
+                    break;
+                case "left":
+                    if (spriteNumber == 1) {
+                        image = left1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = left2;
+                    }
+                    break;
+                case "right":
+                    if (spriteNumber == 1) {
+                        image = right1;
+                    }
+                    if (spriteNumber == 2) {
+                        image = right2;
+                    }
+                    break;
+
+            }
+
+
+        }else {
+            switch (direction){
+                case "up":
+                    image = up;
+                    break;
+                case "down":
+                    image = down;
+                    break;
+                case "left":
+                    image = left;
+                    break;
+                case "right":
+                    image = right;
+                    break;
+            }
+
         }
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+
+
+
+
+
+
+
     }
 }
