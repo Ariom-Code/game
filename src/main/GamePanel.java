@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     //SYS
     TileManager tileM = new TileManager(this);
+    //MapGenerator mapGenerator = new MapGenerator();
     KeyHandler keyH = new KeyHandler();
     Sound soundEffects = new Sound();
     Sound music = new Sound();
@@ -55,21 +56,26 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
-        aSetter.setObjects();
-        playMusic(0);
+        //mapGenerator.generateMap();  // Générer la nouvelle carte
+        //mapGenerator.saveMapToFile("src/resources/maps/map.txt");  // Sauvegarder la carte générée
+        //mapGenerator.displayMap();  // Afficher la carte dans la console (facultatif)
+
+
+        aSetter.setObjects();  // Initialiser les objets dans le jeu
+        playMusic(0);  // Jouer la musique de fond
     }
 
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+
+        tileM.loadMap("/resources/maps/map.txt");
     }
 
-    @Override
     public void run() {
 
         double drawInterval = 1000000000/fps; //allocated time for every loop
         double nextDrawTime = System.nanoTime() + drawInterval; //calculate the time before the next update
-
 
         while (gameThread != null) {
 
@@ -107,6 +113,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileM.draw(g2); //first layer
 
+        //objects
         for(int i = 0; i < obj.length; i++) {
             if(obj[i] != null){
                 obj[i].draw(g2, this);

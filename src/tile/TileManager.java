@@ -1,6 +1,7 @@
 package tile;
 
 import main.GamePanel;
+import main.MapGenerator;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,6 +12,8 @@ import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
+
+
     public Tile[] tile;
     public int mapTileNum[][];
 
@@ -21,7 +24,7 @@ public class TileManager {
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
-        loadMap("/resources/maps/map.txt");
+
     }
 
     public void getTileImage() { //charge les tiles
@@ -79,6 +82,7 @@ public class TileManager {
             br.close();
 
         }catch(Exception e) {
+            e.printStackTrace();
         }
 
 
