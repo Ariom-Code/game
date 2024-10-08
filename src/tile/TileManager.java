@@ -5,10 +5,7 @@ import main.MapGenerator;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class TileManager {
     GamePanel gp;
@@ -57,8 +54,9 @@ public class TileManager {
     //scan la map mais ne l'affiche pas
 
         try {
-            InputStream is = getClass().getResourceAsStream(filePath); //import text file
-            BufferedReader br = new BufferedReader(new InputStreamReader(is)); //read the content
+            //InputStream is = getClass().getResourceAsStream(filePath); //import text file
+            FileReader fileReader = new FileReader(filePath);
+            BufferedReader br = new BufferedReader(fileReader); //read the content
 
             int col = 0;
             int row = 0;

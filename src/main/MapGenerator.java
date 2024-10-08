@@ -3,6 +3,8 @@ package main;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MapGenerator {
@@ -11,7 +13,6 @@ public class MapGenerator {
     private static final int WIDTH = 60;
     private static final int HEIGHT = 32;
 
-    // Codes des tiles
     private static final int DIRT = 0;  // Terre
     private static final int WATER = 1; // Eau
     private static final int WALL = 2;  // Mur
@@ -19,13 +20,34 @@ public class MapGenerator {
 
     private static int[][] map = new int[WIDTH][HEIGHT];
 
+    // Liste des coordonnées protégées
+    private List<int[]> protectedTiles = new ArrayList<>();
+
+    // Ajouter une tuile protégée (exclure des générations)
+    public void addProtectedTile(int x, int y) {
+        if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
+            protectedTiles.add(new int[]{x, y}); //création d'un tableau qui contient les coordonnées de la tile
+        }
+    }
+
+    // Vérifier si une tuile est protégée
+    private boolean isProtected(int x, int y) {
+        for (int[] tile : protectedTiles) {
+            if (tile[0] == x && tile[1] == y) {//regarder les valeurs 0 et 1 de la liste
+                return true; // Coordonnées protégées
+            }
+        }
+        return false;
+    }
 
     // Générer la map avec terre, murs, eau et arbres
     public void generateMap() {
         // Initialiser la map avec de la terre (DIRT) partout
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                map[x][y] = DIRT;
+                if (!isProtected(x, y)) { // Ne pas générer sur les tuiles protégées
+                    map[x][y] = DIRT;
+                }
             }
         }
 
@@ -39,14 +61,12 @@ public class MapGenerator {
             map[WIDTH - 1][y] = WALL;   // Mur droit
         }
 
-        // Placer l'eau et les arbres de manière aléatoire mais "logique"
         placeWater();
         placeTrees();
-
     }
 
     // Placer des zones d'eau de manière aléatoire et groupée
-    public static void placeWater() {
+    public void placeWater() {
         Random random = new Random();
         int waterPatches = 6; // Nombre de groupes d'eau
 
@@ -61,23 +81,25 @@ public class MapGenerator {
                 int newY = startY + random.nextInt(3) - 1;
 
                 if (newX > 1 && newX < WIDTH - 1 && newY > 1 && newY < HEIGHT - 1) {
-                    map[newX][newY] = WATER;
+                    if (!isProtected(newX, newY)) { // Ne pas placer sur les tuiles protégées
+                        map[newX][newY] = WATER;
+                    }
                 }
             }
         }
     }
 
     // Placer des arbres de manière aléatoire
-    public static void placeTrees() {
+    public void placeTrees() {
         Random random = new Random();
-        int numberOfTrees = 30; // Nombre d'arbres à placer
+        int numberOfTrees = 40; // Nombre d'arbres à placer
 
         for (int i = 0; i < numberOfTrees; i++) {
             int x = random.nextInt(WIDTH - 2) + 1;  // Pour éviter les bords
             int y = random.nextInt(HEIGHT - 2) + 1;
 
-            // S'assurer que l'arbre n'est pas placé dans l'eau ou sur un mur
-            if (map[x][y] == DIRT) {
+            // S'assurer que l'arbre n'est pas placé dans l'eau, sur un mur ou une tuile protégée
+            if (map[x][y] == DIRT && !isProtected(x, y)) {
                 map[x][y] = TREE;
             }
         }
@@ -108,4 +130,5 @@ public class MapGenerator {
             e.printStackTrace();
         }
     }
+
 }

@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.Sound;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -50,18 +51,18 @@ public class Player extends Entity{
         try {
 
             down = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
-            up = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
-            left = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
-            right = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
+            up = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_up.png"));
+            left = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_left.png"));
+            right = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_right.png"));
 
-            up1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_walk1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_walk2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/boy_right_2.png"));
+            up1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_up_walk1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_up_walk2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down_walk1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down_walk2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_left.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_left.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_right.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_right.png"));
 
 
         } catch (IOException e){
@@ -138,6 +139,7 @@ public class Player extends Entity{
             String objectName = gp.obj[i].name;
 
             switch (objectName){
+
                 case "Key":
                     gp.playSE(3);
                     numKey++;
@@ -169,7 +171,7 @@ public class Player extends Entity{
                         gp.obj[i] = null;
                         numKeyBlue--;
                         gp.ui.gameFinished = true;
-                        gp.stopMusic();
+                        //gp.stopMusic();
                         gp.playSE(2);
                     }
                     else{
@@ -232,6 +234,7 @@ public class Player extends Entity{
 
 
         }else {
+
             switch (direction){
                 case "up":
                     image = up;
@@ -248,6 +251,7 @@ public class Player extends Entity{
             }
 
         }
+
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
 
