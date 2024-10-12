@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 32; //32x32 tiles
     final int scale = 2;
 
-    public final int tileSize = originalTileSize * scale; //48
+    public final int tileSize = originalTileSize * scale; //64
     public final int maxScreenCol = 12;
     public final int maxScreenRow = 8;
 
@@ -40,12 +40,13 @@ public class GamePanel extends JPanel implements Runnable{
     Sound music = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    public UI ui = new UI(this);
     Thread gameThread;
 
     //ENTITY OBJ
     public Player player = new Player(this, keyH); //this = gamepanelclass Instance of player
     public SuperObject obj[] = new SuperObject[10]; //10 slots of objects = display 10 objects at the same time
+
+    public UI ui = new UI(this, player);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -111,6 +112,13 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g;//change graphics to graphics 2D class (more functions)
 
+        //debug
+        long drawStart = 0;
+        if(keyH.debugMode == true){
+            drawStart = System.nanoTime();
+        }
+
+        //TILES
         tileM.draw(g2); //first layer
 
         //objects
@@ -124,6 +132,13 @@ public class GamePanel extends JPanel implements Runnable{
 
         //UI
         ui.draw(g2);
+
+        //DEBUG
+        if(keyH.debugMode == true){
+            long drawEnd =System.nanoTime();
+            long passed = drawEnd - drawStart;
+            System.out.println("Draw Time :" + passed);
+        }
 
         g2.dispose();
     }

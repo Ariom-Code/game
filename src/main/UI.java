@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 public class UI {
 
     GamePanel gp;
+    Player player;
     Font arial_40, arial_80b;
     BufferedImage keyImage;
     public boolean messageOn = false;
@@ -21,13 +22,14 @@ public class UI {
     double playTime;
     DecimalFormat dFormat = new DecimalFormat("#0.00");
 
-    public UI(GamePanel gp){
+    public UI(GamePanel gp, Player player){
         this.gp = gp;
+        this.player = player;
 
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         arial_80b = new Font("Arial", Font.BOLD, 80);
 
-        OBJ_Key key = new OBJ_Key();
+        OBJ_Key key = new OBJ_Key(gp);
         keyImage = key.image; //récuperer l'image de la classe
     }
 
@@ -80,6 +82,9 @@ public class UI {
             playTime += (double) 1/60;
             g2.drawString("Time : " + dFormat.format(playTime), gp.tileSize*9, 65);
 
+            //Coordinates
+            g2.drawString("X : " + dFormat.format((player.worldX + gp.tileSize / 2) / gp.tileSize), gp.tileSize*9, 115);
+            g2.drawString("Y : " + dFormat.format((player.worldY + gp.tileSize / 2) / gp.tileSize), gp.tileSize*9, 165);
 
             //DRAW MESSAGE
             if(messageOn ==true){

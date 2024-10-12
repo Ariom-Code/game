@@ -3,102 +3,128 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.Sound;
+import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Player extends Entity{
-
+public class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
-
     public final int screenX;
     public final int screenY;
     public int numKey = 0;
     public int numKeyBlue = 0;
+    int standCounter = 0;
+
+    // Tableaux pour stocker les frames d'animation
+    private BufferedImage[] upFrames, downFrames, leftFrames, rightFrames;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
 
-        screenX = gp.screenWidth/2 - (gp.tileSize/2);
-        screenY = gp.screenHeight/2- (gp.tileSize/2);
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
         solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
+        solidArea.x = 20; //commence au n'e pixel du sprite à gauche
+        solidArea.y = 16;   //commence au 16 pixel
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = gp.tileSize - 16;
-        solidArea.height = gp.tileSize - 16;
+        solidArea.width = gp.tileSize - 2*solidArea.x;
+        solidArea.height = gp.tileSize - solidArea.y;
 
-
-        setDefaultValues(); //définit les variables de la class entity
-        getPlayerImage();
+        setDefaultValues(); // Définit les variables de la classe Entity
+        loadAllSpriteSheets(); // Charge les frames depuis le sprite sheet
     }
+
     public void setDefaultValues() {
-        worldX = gp.tileSize * 22; //position sur la map au lancement = spawnpoint
+        worldX = gp.tileSize * 22; // Position sur la map au lancement = spawnpoint
         worldY = gp.tileSize * 18;
         speed = 4;
         direction = "down";
     }
 
-    public void getPlayerImage() {
+    public void loadAllSpriteSheets() {
+
+            // Charger chaque sprite sheet pour chaque direction
+            //BufferedImage upSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
+            //BufferedImage downSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
+            //BufferedImage leftSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
+            //BufferedImage rightSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
+
+        upSpriteSheet = setup("char1_down_walk", 8);
+        downSpriteSheet = setup("char1_down_walk", 8);
+        leftSpriteSheet = setup("char1_down_walk", 8);
+        rightSpriteSheet = setup("char1_down_walk",8);
+
+        // Découper les frames depuis chaque sprite sheet
+        upFrames = extractFrames(upSpriteSheet, 8);
+        downFrames = extractFrames(downSpriteSheet, 8);
+        leftFrames = extractFrames(leftSpriteSheet, 8);
+        rightFrames = extractFrames(rightSpriteSheet, 8);
+
+    }
+
+    public BufferedImage setup(String imageName, int imageNumber){
+
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
 
         try {
 
-            down = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down.png"));
-            up = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_up.png"));
-            left = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_left.png"));
-            right = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_right.png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/resources/player/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize*imageNumber, gp.tileSize);
 
-            up1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_up_walk1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_up_walk2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down_walk1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_down_walk2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_left.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_left.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_right.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/resources/player/character1_right.png"));
-
-
-        } catch (IOException e){
+        }catch (IOException e){
             e.printStackTrace();
         }
+
+        return image;
+    }
+    // Méthode générique pour découper les frames à partir d'un sprite sheet
+    private BufferedImage[] extractFrames(BufferedImage spriteSheet, int frameCount) {
+        int frameWidth = gp.tileSize;
+        int frameHeight = gp.tileSize;
+        BufferedImage[] frames = new BufferedImage[frameCount];
+
+        for (int i = 0; i < frameCount; i++) {
+            frames[i] = spriteSheet.getSubimage(i * frameWidth, 0, frameWidth, frameHeight);
+        }
+
+        return frames;
     }
 
     public void update() {
+        if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
 
-        if(keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true) {
-
-            if(keyH.upPressed == true) {
+            if (keyH.upPressed) {
                 direction = "up";
             }
-            if (keyH.downPressed == true) {
+            if (keyH.downPressed) {
                 direction = "down";
             }
-            if (keyH.leftPressed == true) {
+            if (keyH.leftPressed) {
                 direction = "left";
             }
-            if (keyH.rightPressed == true) {
+            if (keyH.rightPressed) {
                 direction = "right";
             }
 
-
-            //CHECK TILE COLLISION
+            // CHECK TILE COLLISION
             collisionOn = false;
             gp.cChecker.checkTile(this);
 
-            //CHECK OBJECT COLLISION
-            int objIndex = gp.cChecker.checkObject(this, true); //return index
+            // CHECK OBJECT COLLISION
+            int objIndex = gp.cChecker.checkObject(this, true); // Return index
             pickUpObject(objIndex);
 
-            if(collisionOn == false) {
-
-                switch (direction){
+            if (!collisionOn) {
+                switch (direction) {
                     case "up":
                         worldY -= speed;
                         break;
@@ -115,22 +141,87 @@ public class Player extends Entity{
             }
 
             spriteCounter++;
-            if(spriteCounter > 12){ //player image change every 12 frames
-                if(spriteNumber == 1) {
-                    spriteNumber = 2;
-                } else if (spriteNumber ==2) {
-                    spriteNumber = 1;
-                }
+            if (spriteCounter > 10) { // Player image change every 10 frames
+                spriteNumber = (spriteNumber + 1) % 8; // Passe de 0 à 7 pour les frames
                 spriteCounter = 0;
+            }
+        }else spriteCounter++;
+
+        if (keyH.spacePressed) {
+            speed = 7;
+
+        }else speed = 4;
+    }
+
+    public void draw(Graphics2D g2) {
+        BufferedImage image = null;
+
+        // Sélection de la bonne frame selon la direction et la frame actuelle
+        if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
+            standCounter = 0;
+            switch (direction) {
+
+                case "up":
+                    image = upFrames[spriteNumber];
+                    break;
+                case "down":
+                    image = downFrames[spriteNumber];
+                    break;
+                case "left":
+                    image = leftFrames[spriteNumber];
+                    break;
+                case "right":
+                    image = rightFrames[spriteNumber];
+                    break;
+            }
+        } else {
+            // Utiliser la première frame par défaut quand le joueur ne bouge pas
+            standCounter++;
+            if(standCounter < 10){
+
+                switch (direction) {
+                    case "up":
+                        image = upFrames[spriteNumber];
+                        break;
+                    case "down":
+                        image = downFrames[spriteNumber];
+                        break;
+                    case "left":
+                        image = leftFrames[spriteNumber];
+                        break;
+                    case "right":
+                        image = rightFrames[spriteNumber];
+                        break;
+                }
+
+            }else {
+                switch (direction) {
+                    case "up":
+                        image = upFrames[3];
+                        break;
+                    case "down":
+                        image = downFrames[3];
+                        break;
+                    case "left":
+                        image = leftFrames[3];
+                        break;
+                    case "right":
+                        image = rightFrames[3];
+                        break;
+
+                }
             }
 
         }
 
-        if (keyH.spacePressed == true) {
-            worldX = 350;
-            worldY = 250;
-        }
+        g2.drawImage(image, screenX, screenY, null);
+
+        //HITBOX
+        g2.setColor(Color.red);
+        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
+
     }
+
 
     public void pickUpObject(int i){
 
@@ -187,79 +278,5 @@ public class Player extends Entity{
             }
 
         }
-    }
-
-
-    public void draw(Graphics2D g2) {
-        //g2.setColor(Color.white);
-        //g2.fillRect(x,y, gp.tileSize, gp.tileSize); //access tilesize because it's public
-        BufferedImage image = null;
-        if(keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true) {
-
-            switch (direction) {
-                case "up":
-                    if (spriteNumber == 1) {
-                        image = up1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = up2;
-                    }
-                    break;
-                case "down":
-                    if (spriteNumber == 1) {
-                        image = down1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = down2;
-                    }
-                    break;
-                case "left":
-                    if (spriteNumber == 1) {
-                        image = left1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = left2;
-                    }
-                    break;
-                case "right":
-                    if (spriteNumber == 1) {
-                        image = right1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = right2;
-                    }
-                    break;
-
-            }
-
-
-        }else {
-
-            switch (direction){
-                case "up":
-                    image = up;
-                    break;
-                case "down":
-                    image = down;
-                    break;
-                case "left":
-                    image = left;
-                    break;
-                case "right":
-                    image = right;
-                    break;
-            }
-
-        }
-
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-
-
-
-
-
-
-
-
     }
 }
