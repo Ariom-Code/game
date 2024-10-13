@@ -2,17 +2,13 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.Sound;
-import main.UtilityTool;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+
 
 public class Player extends Entity {
 
-    GamePanel gp;
     KeyHandler keyH;
     public final int screenX;
     public final int screenY;
@@ -20,10 +16,12 @@ public class Player extends Entity {
     int standCounter = 0;
 
     // Tableaux pour stocker les frames d'animation
-    private BufferedImage[] upFrames, downFrames, leftFrames, rightFrames;
+    //private BufferedImage[] upFrames, downFrames, leftFrames, rightFrames;
 
     public Player(GamePanel gp, KeyHandler keyH) {
-        this.gp = gp;
+
+        super(gp);//appeler le constructeur de la superclass
+
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
@@ -56,10 +54,10 @@ public class Player extends Entity {
             //BufferedImage leftSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
             //BufferedImage rightSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
 
-        upSpriteSheet = setup("char1_down_walk", 8);
-        downSpriteSheet = setup("char1_down_walk", 8);
-        leftSpriteSheet = setup("char1_down_walk", 8);
-        rightSpriteSheet = setup("char1_down_walk",8);
+        upSpriteSheet = setup("/resources/player/char1_down_walk", 8);
+        downSpriteSheet = setup("/resources/player/char1_down_walk", 8);
+        leftSpriteSheet = setup("/resources/player/char1_down_walk", 8);
+        rightSpriteSheet = setup("/resources/player/char1_down_walk",8);
 
         // Découper les frames depuis chaque sprite sheet
         upFrames = extractFrames(upSpriteSheet, 8);
@@ -69,34 +67,6 @@ public class Player extends Entity {
 
     }
 
-    public BufferedImage setup(String imageName, int imageNumber){
-
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-
-            image = ImageIO.read(getClass().getResourceAsStream("/resources/player/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize*imageNumber, gp.tileSize);
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-
-        return image;
-    }
-    // Méthode générique pour découper les frames à partir d'un sprite sheet
-    private BufferedImage[] extractFrames(BufferedImage spriteSheet, int frameCount) {
-        int frameWidth = gp.tileSize;
-        int frameHeight = gp.tileSize;
-        BufferedImage[] frames = new BufferedImage[frameCount];
-
-        for (int i = 0; i < frameCount; i++) {
-            frames[i] = spriteSheet.getSubimage(i * frameWidth, 0, frameWidth, frameHeight);
-        }
-
-        return frames;
-    }
 
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
@@ -121,6 +91,10 @@ public class Player extends Entity {
             // CHECK OBJECT COLLISION
             int objIndex = gp.cChecker.checkObject(this, true); // Return index
             pickUpObject(objIndex);
+
+            // CHECK NPC COLLISION
+            int npcIndex = gp.cChecker.checkEntity(this, gp.npc); // Return index
+            interactNPC(npcIndex);
 
             if (!collisionOn) {
                 switch (direction) {
@@ -226,6 +200,13 @@ public class Player extends Entity {
 
         if(i != 999){
 
+
+        }
+    }
+
+    public void interactNPC(int i){
+        if(i != 999){
+            System.out.println("Hitting npc");
 
         }
     }
