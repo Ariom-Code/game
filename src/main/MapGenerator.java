@@ -61,14 +61,15 @@ public class MapGenerator {
             map[WIDTH - 1][y] = WALL;   // Mur droit
         }
 
-        placeWater();
-        placeTrees();
+        placeWater(8);
+        expandWater();
+        placeTrees(20);
     }
 
     // Placer des zones d'eau de manière aléatoire et groupée
-    public void placeWater() {
+    public void placeWater(int input) {
         Random random = new Random();
-        int waterPatches = 6; // Nombre de groupes d'eau
+        int waterPatches = input; // Nombre de groupes d'eau
 
         for (int i = 0; i < waterPatches; i++) {
             // Déterminer un point de départ pour un groupe d'eau
@@ -76,7 +77,7 @@ public class MapGenerator {
             int startY = random.nextInt(HEIGHT - 4) + 2;
 
             // Étendre l'eau à partir du point de départ
-            for (int j = 0; j < 8; j++) { // 5 cases d'eau aléatoires autour du point
+            for (int j = 0; j < 15; j++) { // 5 cases d'eau aléatoires autour du point
                 int newX = startX + random.nextInt(3) - 1; // Étendre dans un rayon de 1 case
                 int newY = startY + random.nextInt(3) - 1;
 
@@ -88,11 +89,44 @@ public class MapGenerator {
             }
         }
     }
+    // Méthode qui étend l'eau aux cases adjacentes de terre si elles sont entourées par de l'eau
+    private void expandWater() {
+        boolean[][] newWater = new boolean[WIDTH][HEIGHT];
+
+        for (int y = 1; y < HEIGHT - 1; y++) {
+            for (int x = 1; x < WIDTH - 1; x++) {
+                if (map[x][y] == DIRT) {
+                    // Vérifier si l'eau est présente dans les cases adjacentes
+                    if (isWaterAround(x, y)) {
+                        newWater[x][y] = true;
+                    }
+                }
+            }
+        }
+
+        // Appliquer les changements d'eau
+        for (int y = 1; y < HEIGHT - 1; y++) {
+            for (int x = 1; x < WIDTH - 1; x++) {
+                if (newWater[x][y]) {
+                    map[x][y] = WATER;
+                }
+            }
+        }
+    }
+
+    // Méthode pour vérifier si une case est entourée par de l'eau
+    private boolean isWaterAround(int x, int y) {
+        // Vérifier les cases adjacentes : haut, bas, gauche, droite, et diagonales
+        return (map[x - 1][y] == WATER || map[x + 1][y] == WATER ||
+                map[x][y - 1] == WATER || map[x][y + 1] == WATER ||
+                map[x - 1][y - 1] == WATER || map[x + 1][y - 1] == WATER ||
+                map[x - 1][y + 1] == WATER || map[x + 1][y + 1] == WATER);
+    }
 
     // Placer des arbres de manière aléatoire
-    public void placeTrees() {
+    public void placeTrees(int input) {
         Random random = new Random();
-        int numberOfTrees = 40; // Nombre d'arbres à placer
+        int numberOfTrees = input; // Nombre d'arbres à placer
 
         for (int i = 0; i < numberOfTrees; i++) {
             int x = random.nextInt(WIDTH - 2) + 1;  // Pour éviter les bords

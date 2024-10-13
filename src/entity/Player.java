@@ -16,8 +16,7 @@ public class Player extends Entity {
     KeyHandler keyH;
     public final int screenX;
     public final int screenY;
-    public int numKey = 0;
-    public int numKeyBlue = 0;
+    //public int numKey = 0;
     int standCounter = 0;
 
     // Tableaux pour stocker les frames d'animation
@@ -227,6 +226,16 @@ public class Player extends Entity {
 
         if(i != 999){
 
+
+        }
+    }
+}
+
+
+
+
+/*
+//pickup items : --------------------------------------
             String objectName = gp.obj[i].name;
 
             switch (objectName){
@@ -277,6 +286,4 @@ public class Player extends Entity {
                     break;
             }
 
-        }
-    }
-}
+ */
