@@ -19,9 +19,10 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     public boolean gameFinished = false;
+    public String currentDialogue;
 
-    double playTime;
-    DecimalFormat dFormat = new DecimalFormat("#0.00");
+
+    //DecimalFormat dFormat = new DecimalFormat("#0.00");
 
     public UI(GamePanel gp, Player player){
         this.gp = gp;
@@ -45,13 +46,18 @@ public class UI {
         g2.setFont(arial_40);
         g2.setColor(Color.white);
 
+        //PLAY STATE
         if(gp.gameState == gp.playState){
             //later
         }
+        //PAUSE STATE
         if(gp.gameState == gp.pauseState){
             drawPauseScreen();
         }
-
+        //DIALOGUE STATE
+        if(gp.gameState == gp.dialogueState){
+            drawDialogueScreen();
+        }
 
     }
     public void drawPauseScreen(){
@@ -62,6 +68,37 @@ public class UI {
             int y = gp.screenHeight/2;
 
             g2.drawString(text, x, y);
+    }
+
+    public void drawDialogueScreen(){
+        //WINDOW
+        int x = gp.tileSize;
+        int y = gp.tileSize/4;
+        int width = gp.screenWidth - (gp.tileSize*2);
+        int height = gp.tileSize * 3;
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        x += gp.tileSize/2;
+        y += 40;
+
+        for(String line: currentDialogue.split("\n")){
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+
+    }
+    public void drawSubWindow(int x, int y, int width, int height){
+
+        Color c = new Color(0,0,0, 200);
+        g2.setColor(c);
+        g2.fillRoundRect(x,y,width, height, 35,35); //bords arrondis
+
+        c = new Color(255,255,255);
+        g2.setColor(c);
+        g2.setStroke(new BasicStroke(5));//définit l'épaisseur des bords des éléments de g2
+        g2.drawRoundRect(x+5,y+5,width-10, height-10, 22,22);
+
     }
 
     public int getXForCenter(String text){

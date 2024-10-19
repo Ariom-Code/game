@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
     //SYS
     TileManager tileM = new TileManager(this);
     MapGenerator mapGenerator = new MapGenerator();
-    KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH = new KeyHandler(this);
     Sound soundEffects = new Sound();
     Sound music = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable{
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
-
+    public final int dialogueState = 3;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -67,9 +67,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame() {
         mapGenerator.addProtectedTile(40, 16);
-        mapGenerator.generateMap();  // Générer la nouvelle carte
-        mapGenerator.saveMapToFile("src/resources/maps/map.txt");  // Sauvegarder la carte générée
-        mapGenerator.displayMap();  // Afficher la carte dans la console (facultatif)
+        
+        //mapGenerator.generateMap(8, 20);  // Générer la nouvelle carte
+        //mapGenerator.saveMapToFile("src/resources/maps/map.txt");  // Sauvegarder la carte générée
+        //mapGenerator.displayMap();  // Afficher la carte dans la console (facultatif)
 
         tileM.loadMap("src/resources/maps/map.txt");
 
@@ -92,6 +93,15 @@ public class GamePanel extends JPanel implements Runnable{
         double nextDrawTime = System.nanoTime() + drawInterval; //calculate the time before the next update
 
         while (gameThread != null) {
+
+//            if(keyH.enterPressed ==true){
+//                mapGenerator.generateMap(8, 20);  // Générer la nouvelle carte
+//                mapGenerator.saveMapToFile("src/resources/maps/map.txt");  // Sauvegarder la carte générée
+//                mapGenerator.displayMap();  // Afficher la carte dans la console (facultatif)
+//
+//                tileM.loadMap("src/resources/maps/map.txt");
+//            }
+
 
             // Update infos and pos
             update();
@@ -158,14 +168,27 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
         //NPC
+        if(gameState == playState){
+
+        }
         for(int i = 0; i < npc.length; i++){
             if(npc[i] != null){
-                npc[i].draw(g2);
+
+                //Layer npc - player
+                if(npc[i].worldY > player.worldY){
+                    player.draw(g2);
+                    npc[i].draw(g2);
+                }else {
+                    npc[i].draw(g2);
+                    player.draw(g2);
+                }
+            }else {
+                player.draw(g2);
             }
         }
 
         //PLAYER
-        player.draw(g2);
+        //player.draw(g2); ^
 
         //UI
         ui.draw(g2);

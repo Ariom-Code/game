@@ -29,6 +29,7 @@ public class NPC_1 extends Entity{
 
 
         loadAllSpriteSheets();
+        setDialogue();
     }
 
     public void loadAllSpriteSheets() {
@@ -46,6 +47,14 @@ public class NPC_1 extends Entity{
 
     }
 
+    public void setDialogue(){
+
+        dialogues[0] = "Hello, lad.";
+        dialogues[1] = "I'm a prostitute and you?.";
+        dialogues[2] = "Zob Humide. Zob Humide. Zob Humide. \nZob Humide. Zob Humide. Zob Humide. \nZob Humide. Zob Humide.";
+        dialogues[3] = "Mange mon vié.";
+
+    }
     public void setAction(){
 
         actionLockCounter++;
@@ -71,7 +80,11 @@ public class NPC_1 extends Entity{
 
 
     }
+    public void speak(){//non nécéssaire mais permet de customiser la classe speak quand il le faudra
 
+        super.speak();//on appele la méthode speak de la classe entity
+
+    }
 
 }
 

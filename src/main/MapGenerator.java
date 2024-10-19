@@ -41,7 +41,7 @@ public class MapGenerator {
     }
 
     // Générer la map avec terre, murs, eau et arbres
-    public void generateMap() {
+    public void generateMap(int water, int trees) {
         // Initialiser la map avec de la terre (DIRT) partout
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
@@ -61,9 +61,9 @@ public class MapGenerator {
             map[WIDTH - 1][y] = WALL;   // Mur droit
         }
 
-        placeWater(8);
+        placeWater(water);
         expandWater();
-        placeTrees(20);
+        placeTrees(trees);
     }
 
     // Placer des zones d'eau de manière aléatoire et groupée
@@ -138,6 +138,7 @@ public class MapGenerator {
             }
         }
     }
+
 
     // Afficher la map dans la console
     public void displayMap() {
