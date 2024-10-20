@@ -3,16 +3,9 @@ package entity;
 import main.GamePanel;
 import main.UtilityTool;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Random;
 
 public class NPC_1 extends Entity{
-
-
-
 
     public NPC_1(GamePanel gp){
 
@@ -34,16 +27,16 @@ public class NPC_1 extends Entity{
 
     public void loadAllSpriteSheets() {
 
-        upSpriteSheet = setup("/resources/npc/char2_down_walk", 8);
-        downSpriteSheet = setup("/resources/npc/char2_down_walk", 8);
-        leftSpriteSheet = setup("/resources/npc/char2_down_walk", 8);
-        rightSpriteSheet = setup("/resources/npc/char2_down_walk",8);
+        upSpriteSheet = UtilityTool.setup("/resources/npcs/char2_down_walk", 8, gp.tileSize);
+        downSpriteSheet = UtilityTool.setup("/resources/npcs/char2_down_walk", 8, gp.tileSize);
+        leftSpriteSheet = UtilityTool.setup("/resources/npcs/char2_down_walk", 8, gp.tileSize);
+        rightSpriteSheet = UtilityTool.setup("/resources/npcs/char2_down_walk",8, gp.tileSize);
 
         // Découper les frames depuis chaque sprite sheet
-        upFrames = extractFrames(upSpriteSheet, 8);
-        downFrames = extractFrames(downSpriteSheet, 8);
-        leftFrames = extractFrames(leftSpriteSheet, 8);
-        rightFrames = extractFrames(rightSpriteSheet, 8);
+        upFrames = UtilityTool.extractFrames(upSpriteSheet, 8, gp.tileSize);
+        downFrames = UtilityTool.extractFrames(downSpriteSheet, 8, gp.tileSize);
+        leftFrames = UtilityTool.extractFrames(leftSpriteSheet, 8, gp.tileSize);
+        rightFrames = UtilityTool.extractFrames(rightSpriteSheet, 8, gp.tileSize);
 
     }
 

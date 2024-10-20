@@ -53,13 +53,15 @@ public class GamePanel extends JPanel implements Runnable{
 
     //GAME STATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
 
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.darkGray);
+        this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);//gamepanel can receive input
@@ -79,7 +81,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setNpc();
         //playMusic(0);  // Jouer la musique de fond
 
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread() {
@@ -96,7 +98,7 @@ public class GamePanel extends JPanel implements Runnable{
 
 //            if(keyH.enterPressed ==true){
 //                mapGenerator.generateMap(8, 20);  // Générer la nouvelle carte
-//                mapGenerator.saveMapToFile("src/resources/maps/map.txt");  // Sauvegarder la carte générée
+//                mapGenerator.saveMapToFile("src/resources/maps/map.txt");// Sauvegarder la carte générée
 //                mapGenerator.displayMap();  // Afficher la carte dans la console (facultatif)
 //
 //                tileM.loadMap("src/resources/maps/map.txt");
@@ -157,41 +159,49 @@ public class GamePanel extends JPanel implements Runnable{
             drawStart = System.nanoTime();
         }
 
-        //TILES
-        tileM.draw(g2); //first layer
 
-        //objects
-        for(int i = 0; i < obj.length; i++) {
-            if(obj[i] != null){
-                obj[i].draw(g2, this);
+        //TITLE SCREEN
+        if(gameState == titleState){
+            ui.draw(g2);
+        }
+        else {
+            //TILES
+            tileM.draw(g2); //first layer
+
+            //objects
+            for(int i = 0; i < obj.length; i++) {
+                if(obj[i] != null){
+                    obj[i].draw(g2, this);
+                }
             }
-        }
 
-        //NPC
-        if(gameState == playState){
+            //NPC
+            if(gameState == playState){
 
-        }
-        for(int i = 0; i < npc.length; i++){
-            if(npc[i] != null){
+            }
+            for(int i = 0; i < npc.length; i++){
+                if(npc[i] != null){
 
-                //Layer npc - player
-                if(npc[i].worldY > player.worldY){
-                    player.draw(g2);
-                    npc[i].draw(g2);
+                    //Layer npc - player
+                    if(npc[i].worldY > player.worldY){
+                        player.draw(g2);
+                        npc[i].draw(g2);
+                    }else {
+                        npc[i].draw(g2);
+                        player.draw(g2);
+                    }
                 }else {
-                    npc[i].draw(g2);
                     player.draw(g2);
                 }
-            }else {
-                player.draw(g2);
             }
+
+            //PLAYER
+            //player.draw(g2); ^
+
+            //UI
+            ui.draw(g2);
+
         }
-
-        //PLAYER
-        //player.draw(g2); ^
-
-        //UI
-        ui.draw(g2);
 
         //DEBUG
         if(keyH.debugMode == true){

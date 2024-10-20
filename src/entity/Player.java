@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -44,6 +45,10 @@ public class Player extends Entity {
         worldY = gp.tileSize * 18;
         speed = 4;
         direction = "down";
+
+        //PLAYER STATUS
+        maxLife = 6;
+        life = maxLife;
     }
 
     public void loadAllSpriteSheets() {
@@ -54,19 +59,18 @@ public class Player extends Entity {
             //BufferedImage leftSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
             //BufferedImage rightSpriteSheet = ImageIO.read(getClass().getResourceAsStream("/resources/player/char1_down_walk.png"));
 
-        upSpriteSheet = setup("/resources/player/char1_down_walk", 8);
-        downSpriteSheet = setup("/resources/player/char1_down_walk", 8);
-        leftSpriteSheet = setup("/resources/player/char1_down_walk", 8);
-        rightSpriteSheet = setup("/resources/player/char1_down_walk",8);
+        upSpriteSheet = UtilityTool.setup("/resources/player/char1_down_walk", 8, gp.tileSize);
+        downSpriteSheet = UtilityTool.setup("/resources/player/char1_down_walk", 8, gp.tileSize);
+        leftSpriteSheet = UtilityTool.setup("/resources/player/char1_down_walk", 8, gp.tileSize);
+        rightSpriteSheet = UtilityTool.setup("/resources/player/char1_down_walk",8, gp.tileSize);
 
         // Découper les frames depuis chaque sprite sheet
-        upFrames = extractFrames(upSpriteSheet, 8);
-        downFrames = extractFrames(downSpriteSheet, 8);
-        leftFrames = extractFrames(leftSpriteSheet, 8);
-        rightFrames = extractFrames(rightSpriteSheet, 8);
+        upFrames = UtilityTool.extractFrames(upSpriteSheet, 8, gp.tileSize);
+        downFrames = UtilityTool.extractFrames(downSpriteSheet, 8, gp.tileSize);
+        leftFrames = UtilityTool.extractFrames(leftSpriteSheet, 8, gp.tileSize);
+        rightFrames = UtilityTool.extractFrames(rightSpriteSheet, 8, gp.tileSize);
 
     }
-
 
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed) {
@@ -192,7 +196,7 @@ public class Player extends Entity {
 
         //HITBOX
         g2.setColor(Color.red);
-        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
+        //g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
 
     }
 

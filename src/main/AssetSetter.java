@@ -27,5 +27,6 @@ public class AssetSetter {
         gp.npc[0] = new NPC_1(gp);
         gp.npc[0].worldX = gp.tileSize*21;
         gp.npc[0].worldY = gp.tileSize*21;
+
     }
 }

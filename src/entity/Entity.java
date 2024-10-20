@@ -29,6 +29,12 @@ public class Entity {
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
 
+
+    //CHARACTER STATUS
+    public int maxLife;
+    public int life;
+
+
     public Entity(GamePanel gp){ //abstract = pas d'instance
         this.gp = gp;
     }
@@ -120,38 +126,9 @@ public class Entity {
 
             //HITBOX
             g2.setColor(Color.red);
-            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
+            //g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
 
         }
     }
 
-
-    public BufferedImage setup(String imagePath, int imageNumber){
-
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-
-            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize*imageNumber, gp.tileSize);
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-
-        return image;
-    }
-    // Méthode générique pour découper les frames à partir d'un sprite sheet
-    public BufferedImage[] extractFrames(BufferedImage spriteSheet, int frameCount) {
-        int frameWidth = gp.tileSize;
-        int frameHeight = gp.tileSize;
-        BufferedImage[] frames = new BufferedImage[frameCount];
-
-        for (int i = 0; i < frameCount; i++) {
-            frames[i] = spriteSheet.getSubimage(i * frameWidth, 0, frameWidth, frameHeight);
-        }
-
-        return frames;
-    }
 }
