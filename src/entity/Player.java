@@ -100,6 +100,10 @@ public class Player extends Entity {
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc); // Return index
             interactNPC(npcIndex);
 
+            // CHECK EVENT
+            gp.eHandler.checkEvent();
+            gp.keyH.enterPressed = false;
+
             if (!collisionOn) {
                 switch (direction) {
                     case "up":
@@ -196,7 +200,7 @@ public class Player extends Entity {
 
         //HITBOX
         g2.setColor(Color.red);
-        //g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
+        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width , solidArea.height);
 
     }
 
@@ -218,7 +222,7 @@ public class Player extends Entity {
 
             }
         }
-        gp.keyH.enterPressed = false;
+
     }
 }
 

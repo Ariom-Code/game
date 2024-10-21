@@ -16,12 +16,9 @@ public class UI {
     Player player;
     Graphics2D g2;
     Font Noto_40;
-    //BufferedImage keyImage;
     BufferedImage heart_full, heart_half, heart_blank;
     public boolean messageOn = false;
     public String message = "";
-    int messageCounter = 0;
-    public boolean gameFinished = false;
     public String currentDialogue;
     public int commandNum = 0;
     public int titleScreenState = 0; //0 first screen, 1 second screen
@@ -57,6 +54,7 @@ public class UI {
         message = text;
         messageOn = true;
     }
+
     public void draw(Graphics2D g2){
 
         this.g2 = g2;
@@ -228,8 +226,6 @@ public class UI {
     }
 
     public void drawPlayerLife(){
-
-        gp.player.life= 20;
 
         int x = gp.tileSize/2;
         int y = gp.tileSize/2;

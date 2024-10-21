@@ -2,6 +2,7 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.DecimalFormat;
 
 public class KeyHandler implements KeyListener {
 
@@ -109,6 +110,11 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER){
                 enterPressed = true;
+            }
+            if (code == KeyEvent.VK_C){
+
+                System.out.println("x :" + gp.player.worldX/gp.tileSize);
+                System.out.println("y :" + gp.player.worldY/gp.tileSize);
             }
 
 
