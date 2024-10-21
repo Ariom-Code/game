@@ -1,5 +1,6 @@
 package object;
 
+import entity.Entity;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -7,14 +8,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class OBJ_Heart extends SuperObject{
-
-
-    GamePanel gp;
+public class OBJ_Heart extends Entity {
 
     public OBJ_Heart(GamePanel gp){
 
-        this.gp = gp;
+        super(gp);
 
         name = "Heart";
 

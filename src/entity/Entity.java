@@ -14,10 +14,17 @@ public class Entity {
     public int worldX, worldY;
     public int speed;
 
+    public BufferedImage image,  image2, image3;
+    public BufferedImage imageSheet;
+    public BufferedImage imageFrames[];
+
+    public String name;
+    public boolean collision = false;
+
     public BufferedImage upSpriteSheet, downSpriteSheet, leftSpriteSheet, rightSpriteSheet;
     public BufferedImage[] upFrames, downFrames, leftFrames, rightFrames;
 
-    public String direction;
+    public String direction = "down";
 
     public int spriteCounter = 0;
     public int spriteNumber = 1;
@@ -102,8 +109,6 @@ public class Entity {
                 && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
                 && worldY + gp.tileSize > gp.player.worldY - gp.player.screenY
                 && worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
-
-
 
                 switch (direction) {
 
